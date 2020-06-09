@@ -1,6 +1,6 @@
 # cursos-pet
-Todos os cursos ministrado no PET SI
+Todos os cursos ministrado no PET SI*
 <br />
 <br />
 <br />
-<i>Jefferson de Carvalho Silva</i>
+<i>*O curso inicial, ministrado no WTISC, você encontra <a href="https://github.com/jeffersoncarvalho/WTISC-POKEMON">aqui</a></i>
