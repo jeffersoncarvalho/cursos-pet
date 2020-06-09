@@ -1,0 +1,16 @@
+{
+  "estudantes": [
+    {
+      "nome": "Fulano de Tal",
+      "curso": "Engenharia da Computação",
+      "IRA": 7.5,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "nome": "Pedro",
+      "curso": "Engenharia de Software",
+      "IRA": 9
+    }
+  ]
+}
