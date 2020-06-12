@@ -1,18 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom'
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import { ReactReduxFirebaseProvider} from 'react-redux-firebase'
+import reduxThunk from 'redux-thunk'
+
+import reducer from './store/reducers'  //chamando index.js
+import firebase from './utils/firebase'
+
+const store = createStore(
+  reducer,
+  {},
+  applyMiddleware(reduxThunk)
+)
+
+const rrfProps = {
+  firebase,
+  config: {},
+  dispatch: store.dispatch
+}
+
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
+  <Provider store={store}>
+    <ReactReduxFirebaseProvider {...rrfProps}>
       <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+    </ReactReduxFirebaseProvider>
+  </Provider>
+  , document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
