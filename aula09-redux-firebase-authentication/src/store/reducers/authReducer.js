@@ -1,3 +1,4 @@
+import {SIGNUP_SUCCESS,SIGNUP_ERROR} from '../actions/actionTypes'
 
 const INITIAL_STATE = {
     authMsg: null,
@@ -5,9 +6,21 @@ const INITIAL_STATE = {
 }
 
 export default function (state = INITIAL_STATE,action){
-    return {
-        ...state,
-        authMsg: 'Usuário logado com sucesso',
-        user:'paulo@uol.com.br'
+
+    switch(action.type){
+        case SIGNUP_SUCCESS:
+            return {
+                ...state,
+                authMsg: action.payload.authMessage,
+                user: action.payload.userMail,
+            }
+        case SIGNUP_ERROR:
+            return {
+                ...state,
+                authMsg: action.payload.authMessage
+            }
+        default:
+            return state
+
     }
 }

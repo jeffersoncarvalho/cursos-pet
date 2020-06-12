@@ -1,48 +1,75 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Card from './Card'
 
-export default class Signup extends Component{
+import { connect } from 'react-redux'
+import { signup } from '../store/actions/authActionCreator'
 
-    constructor(props){
+
+class Signup extends Component {
+
+    constructor(props) {
         super(props)
-        this.state = {login:'',password:''}
+        this.state = { login: '', password: '' }
         this.setLogin = this.setLogin.bind(this)
         this.setPassword = this.setPassword.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    setLogin(e){
-        this.setState({login:e.target.value})
+    setLogin(e) {
+        this.setState({ login: e.target.value })
     }
 
-    setPassword(e){
-        this.setState({password:e.target.value})
+    setPassword(e) {
+        this.setState({ password: e.target.value })
     }
 
-    onSubmit(e){
+    onSubmit(e) {
         e.preventDefault()
-        console.log(this.state.login)
-        console.log(this.state.password)
-        this.setState({login:'',password:''})
+        /*console.log(this.state.login)
+        console.log(this.state.password)*/
+
+        this.props.mySignup(this.state.login,this.state.password)
+
+        this.setState({ login: '', password: '' })
     }
 
-    render(){
+    render() {
         return (
             <Card title='Cadastrar'>
-                <form onSubmit={this.onSubmit}> 
+                <form onSubmit={this.onSubmit}>
                     <div className='form-group'>
                         <label>Login: </label>
-                        <input type='text' className='form-control' 
-                        value={this.state.login} onChange={this.setLogin} />
+                        <input type='text' className='form-control'
+                            value={this.state.login} onChange={this.setLogin} />
                     </div>
                     <div className='form-group'>
                         <label>Password: </label>
-                        <input type='password' className='form-control' 
-                        value={this.state.password} onChange={this.setPassword} />
+                        <input type='password' className='form-control'
+                            value={this.state.password} onChange={this.setPassword} />
                     </div>
-                    <input type='submit' value='Cadastrar' className='btn btn-primary'/>
+                    <input type='submit' value='Cadastrar' className='btn btn-primary' />
                 </form>
+                <div className='alert alert-info' style={{marginTop:'10px'}}>
+                    {this.props.userMsg}
+                </div>
             </Card>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        userMsg: state.authReducer.authMsg
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        mySignup(login,password) {
+            const action =  signup(login,password)
+            dispatch(action)  
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Signup)
