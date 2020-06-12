@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
 import Card from './Card'
 
-export default class Signin extends Component{
+import { connect } from 'react-redux'
+import { signin } from '../store/actions/authActionCreator'
+
+
+class Signin extends Component{
 
     constructor(props){
         super(props)
@@ -21,8 +25,13 @@ export default class Signin extends Component{
 
     onSubmit(e){
         e.preventDefault()
-        console.log(this.state.login)
-        console.log(this.state.password)
+        /*console.log(this.state.login)
+        console.log(this.state.password)*/
+        
+        this.props.mySignin(this.state.login,this.state.password, ()=>{
+            console.log('acabou!')
+        })
+
         this.setState({login:'',password:''})
     }
 
@@ -40,9 +49,29 @@ export default class Signin extends Component{
                         <input type='password' className='form-control' 
                         value={this.state.password} onChange={this.setPassword} />
                     </div>
-                    <input type='submit' value='Cadastrar' className='btn btn-primary'/>
+                    <input type='submit' value='Fazer Login' className='btn btn-primary'/>
                 </form>
+                <div className='alert alert-info' style={{marginTop:'10px'}}>
+                    {this.props.userMsg}
+                </div>
             </Card>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        userMsg: state.authReducer.authMsg
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        mySignin(login,password,callback) {
+            const action =  signin(login,password,callback)
+            dispatch(action)  
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Signin)
