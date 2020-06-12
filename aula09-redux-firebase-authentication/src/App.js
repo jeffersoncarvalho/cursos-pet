@@ -7,7 +7,9 @@ import Signup from './components/Signup'
 import ContentA from './components/ContentA'
 import ContentB from './components/ContentB'
 
-export default class App extends Component {
+import { connect } from 'react-redux'
+
+class App extends Component {
 
   render() {
     return (
@@ -33,6 +35,7 @@ export default class App extends Component {
                   <Link to={'/contentB'} className='nav-link'>Conteúdo B</Link>
                 </li>
               </ul>
+              {this.props.userLogado}
             </div>  
           </nav>
           <Switch>
@@ -47,3 +50,11 @@ export default class App extends Component {
     )
   }
 }
+
+function mapStateToProps(state){
+  return{
+    userLogado: state.authReducer.user
+  }
+}
+
+export default connect(mapStateToProps)(App)
