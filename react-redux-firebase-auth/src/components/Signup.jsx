@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Card from './Card'
+import Card from './commons/Card'
 
 import { connect } from 'react-redux'
 import { signup } from '../store/actions/authActionCreator'
@@ -13,6 +13,15 @@ class Signup extends Component {
         this.setLogin = this.setLogin.bind(this)
         this.setPassword = this.setPassword.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this._isMounted = false
+    }
+
+    componentDidMount(){
+        this._isMounted = true
+    }
+
+    componentWillUnmount(){
+        this._isMounted = false
     }
 
     setLogin(e) {
@@ -25,12 +34,40 @@ class Signup extends Component {
 
     onSubmit(e) {
         e.preventDefault()
-        /*console.log(this.state.login)
-        console.log(this.state.password)*/
+        this.setState({loading:true})
+        
+        this.props.mySignup(this.state.login, this.state.password, ()=>{
+            this._isMounted && this.setState({loading:false})
+        })
 
-        this.props.mySignup(this.state.login,this.state.password)
+        this.setState({ login: '', password: ''})
+    }
 
-        this.setState({ login: '', password: '' })
+    renderButton() {
+        if (this.state.loading) {
+            return (
+                <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                </button>
+            )
+        }
+
+        return (
+            <input type='submit' value='Cadastrar' className='btn btn-primary' />
+        )
+    }
+
+    renderMessage() {
+        if (this.props.userMsg) {
+            const msgType = (this.props.userMsg.includes('Err') ? 'alert-danger' : 'alert-info')
+            return (
+                <div className={`alert ${msgType}`} style={{ marginTop: '10px' }}>
+                    {this.props.userMsg}
+                </div>
+            )
+        }
+        return
     }
 
     render() {
@@ -47,11 +84,9 @@ class Signup extends Component {
                         <input type='password' className='form-control'
                             value={this.state.password} onChange={this.setPassword} />
                     </div>
-                    <input type='submit' value='Cadastrar' className='btn btn-primary' />
+                    {this.renderButton()}
                 </form>
-                <div className='alert alert-info' style={{marginTop:'10px'}}>
-                    {this.props.userMsg}
-                </div>
+                {this.renderMessage()}
             </Card>
         )
     }
@@ -63,13 +98,13 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch){
-    return{
-        mySignup(login,password) {
-            const action =  signup(login,password)
-            dispatch(action)  
+function mapDispatchToProps(dispatch) {
+    return {
+        mySignup(login, password,callback) {
+            const action = signup(login, password,callback)
+            dispatch(action)
         }
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Signup)
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)

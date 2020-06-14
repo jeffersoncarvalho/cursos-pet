@@ -1,16 +1,10 @@
 import React, {Component} from 'react'
-import Card from './Card'
+import Card from './commons/RestrictCard'
 
 import { connect } from 'react-redux'
 import { signout } from '../store/actions/authActionCreator'
 
 class ContentA extends Component{
-
-    componentDidMount(){
-        if(this.props.firebaseAuth.isLoaded && this.props.firebaseAuth.isEmpty){
-            this.props.history.push('/signin')
-        }
-    }
 
     logout(){
         this.props.mySignout(
@@ -22,7 +16,7 @@ class ContentA extends Component{
 
     render(){
         return (
-            <Card title='Conteúdo A'>
+            <Card title='Conteúdo A' history={this.props.history}>
                 Conteúdo apenas para usuários. <br /><br />
                 <button className='btn btn-danger'
                     onClick={()=>this.logout()}

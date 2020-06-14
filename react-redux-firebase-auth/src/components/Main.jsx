@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Card from './Card'
+import Card from './commons/Card'
 
 export default class Main extends Component{
     render(){

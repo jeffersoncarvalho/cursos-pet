@@ -2,11 +2,11 @@ import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, SIGNOUT_SUC
 
 const INITIAL_STATE = {
     authMsg: null,
-    user: null
+    user: ''
 }
 
 export default function (state = INITIAL_STATE, action) {
-
+    console.log('action: ' + action.type + ' ' + state.user)
     switch (action.type) {
         case SIGNUP_SUCCESS:
             return {

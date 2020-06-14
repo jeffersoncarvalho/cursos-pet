@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Card from './Card'
+import Card from './commons/Card'
 
 import { connect } from 'react-redux'
 import { signin } from '../store/actions/authActionCreator'
@@ -9,7 +9,7 @@ class Signin extends Component{
 
     constructor(props){
         super(props)
-        this.state = {login:'',password:''}
+        this.state = {login:'',password:'',loading:false}
         this.setLogin = this.setLogin.bind(this)
         this.setPassword = this.setPassword.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -23,13 +23,40 @@ class Signin extends Component{
         this.setState({password:e.target.value})
     }
 
+    renderButton() {
+        if (this.state.loading) {
+            return (
+                <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                </button>
+            )
+        }
+
+        return (
+            <input type='submit' value='Efetuar Login' className='btn btn-primary' />
+        )
+    }
+
+    renderMessage() {
+        if (this.props.userMsg) {
+            const msgType = (this.props.userMsg.includes('Err') ? 'alert-danger' : 'alert-info')
+            return (
+                <div className={`alert ${msgType}`} style={{ marginTop: '10px' }}>
+                    {this.props.userMsg}
+                </div>
+            )
+        }
+        return
+    }
+
+
     onSubmit(e){
         e.preventDefault()
-        /*console.log(this.state.login)
-        console.log(this.state.password)*/
+        this.setState({loading:true})
         
         this.props.mySignin(this.state.login,this.state.password, ()=>{
-            console.log('acabou!')
+            this.setState({loading:false})
         })
 
         this.setState({login:'',password:''})
@@ -49,11 +76,9 @@ class Signin extends Component{
                         <input type='password' className='form-control' 
                         value={this.state.password} onChange={this.setPassword} />
                     </div>
-                    <input type='submit' value='Fazer Login' className='btn btn-primary'/>
+                    {this.renderButton()}
                 </form>
-                <div className='alert alert-info' style={{marginTop:'10px'}}>
-                    {this.props.userMsg}
-                </div>
+                {this.renderMessage()}
             </Card>
         )
     }

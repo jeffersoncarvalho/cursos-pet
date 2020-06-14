@@ -35,7 +35,7 @@ class App extends Component {
                   <Link to={'/contentB'} className='nav-link'>Conteúdo B</Link>
                 </li>
               </ul>
-              {this.props.userLogado}
+              {this.props.user}
             </div>  
           </nav>
           <Switch>
@@ -53,7 +53,7 @@ class App extends Component {
 
 function mapStateToProps(state){
   return{
-    userLogado: state.authReducer.user
+    user: state.authReducer.user
   }
 }
 
