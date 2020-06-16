@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 class RestrictedCard extends Component{
 
     componentDidMount(){
+
         if(this.props.firebaseAuth.isLoaded && this.props.firebaseAuth.isEmpty){
             this.props.history.push('/signin')
         }
@@ -25,5 +26,7 @@ function mapStateToProps(state) {
         firebaseAuth: state.firebaseReducer.auth
     }
 }
+
+
 
 export default connect(mapStateToProps)(RestrictedCard)

@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR } from '../actions/actionTypes'
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, RESET_AUTH_MESSAGE } from '../actions/actionTypes'
 
 const INITIAL_STATE = {
     authMsg: null,
@@ -6,7 +6,6 @@ const INITIAL_STATE = {
 }
 
 export default function (state = INITIAL_STATE, action) {
-    console.log('action: ' + action.type + ' ' + state.user)
     switch (action.type) {
         case SIGNUP_SUCCESS:
             return {
@@ -39,6 +38,11 @@ export default function (state = INITIAL_STATE, action) {
             return {
                 ...state,
                 authMsg: action.payload.authMessage
+            }
+        case RESET_AUTH_MESSAGE:
+            return {
+                ...state,
+                authMsg: null
             }
         default:
             return state
