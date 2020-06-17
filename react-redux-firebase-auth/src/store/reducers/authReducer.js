@@ -1,5 +1,6 @@
 import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR } from '../actions/actionTypes'
 
+//estado
 const INITIAL_STATE = {
   authMsg: null,
   user: null
