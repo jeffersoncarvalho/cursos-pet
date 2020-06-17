@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, RESET_AUTH_MESSAGE } from './actionTypes'
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, RESET_AUTH_MESSAGE, EMAIL_NOT_VERIFIED} from './actionTypes'
 import firebase from '../../utils/firebase'
 
 export const signup = (email, password, callback) => {
@@ -11,11 +11,18 @@ export const signup = (email, password, callback) => {
                     () => {
                         firebase.auth().onAuthStateChanged(
                             (user) => {
+                                user.sendEmailVerification();
+                            });
+                    })
+                .then(
+                    () => {
+                        firebase.auth().onAuthStateChanged(
+                            (user) => {
                                 if (user) {
                                     dispatch({
                                         type: SIGNUP_SUCCESS,
                                         payload: {
-                                            authMessage: `Cadastro efetuado com sucesso!`,
+                                            authMessage: `Cadastro efetuado com sucesso! Verifque seu e-mail.`,
                                             userMail: user.email
                                         }
                                     })
@@ -61,13 +68,25 @@ export const signin = (email, password, callback) => {
                 .signInWithEmailAndPassword(email, password)
                 .then(
                     (data) => {
-                        dispatch({
-                            type: SIGNIN_SUCCESS,
-                            payload: {
-                                authMessage: `Login efetuado com sucesso`,
-                                userMail: data.user.email
-                            }
-                        })
+
+                        if(!data.user.emailVerified){
+                            dispatch({
+                                type: EMAIL_NOT_VERIFIED,
+                                payload: {
+                                    authMessage: `E-mail não verificado. Veja sua caixa de e-mail.`,
+                                    verified: false
+                                }
+                            })
+                        }else{
+                            dispatch({
+                                type: SIGNIN_SUCCESS,
+                                payload: {
+                                    authMessage: `Login efetuado com sucesso`,
+                                    userMail: data.user.email,
+                                    verified: true
+                                }
+                            })
+                        }
                         callback()
                     }
                 )
@@ -102,7 +121,7 @@ export const signout = (callback) => {
                     () => {
                         dispatch({
                             type: SIGNOUT_SUCCESS,
-                            payload: { authMessage: `Signout efetuado com sucesso` }
+                            payload: { authMessage: `Signout efetuado com sucesso`, verified: false }
                         })
                         callback()
                     }

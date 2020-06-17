@@ -10,6 +10,10 @@ class RestrictedCard extends Component{
         if(this.props.firebaseAuth.isLoaded && this.props.firebaseAuth.isEmpty){
             this.props.history.push('/signin')
         }
+
+        if(!this.props.emailVerified){
+            this.props.history.push('/signin')
+        }
     }
 
     render(){
@@ -23,7 +27,8 @@ class RestrictedCard extends Component{
 
 function mapStateToProps(state) {
     return {
-        firebaseAuth: state.firebaseReducer.auth
+        firebaseAuth: state.firebaseReducer.auth,
+        emailVerified: state.authReducer.verified
     }
 }
 
