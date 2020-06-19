@@ -1,31 +1,13 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { signout } from '../store/actions/authActionCreator'
-import Card from './Card'
 
-class Content extends Component {
 
-    componentDidMount() {
-        if (this.props.auth.isLoaded && this.props.auth.isEmpty) {
-            this.props.history.push('/signin')
-        }
-    }
+import Card from './RestrictedCard'
 
-    logout() {
-        this.props.signout(
-            () => {
-                this.props.history.push('/signin')
-            }
-        )
-    }
-
+export default class Content extends Component {
     render() {
         return (
-            <Card title='Conteúdo do Site'>
+            <Card title='Conteúdo do Site' history={this.props.history}>
                 Conteúdo apenas para usuários A<br /><br />
-                <button className='btn btn-danger' onClick={() => this.logout()}>
-                    Logout
-                </button>
             </Card>
         )
     }
@@ -33,22 +15,3 @@ class Content extends Component {
 
 
 
-function mapStateToProps(state) {
-    return {
-        auth: state.firebaseReducer.auth,
-        authMsg: state.authReducer.authMsg
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        signout(callback) {
-            const action = signout(callback)
-            dispatch(action)
-        }
-    }
-}
-
-export default connect(
-    mapStateToProps, mapDispatchToProps
-)(Content);

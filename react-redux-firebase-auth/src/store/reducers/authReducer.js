@@ -1,9 +1,10 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR } from '../actions/actionTypes'
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, EMAIL_NOT_VERIFIED } from '../actions/actionTypes'
 
 //estado
 const INITIAL_STATE = {
   authMsg: null,
-  user: null
+  user: null,
+  verified: false
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -13,7 +14,8 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         authMsg: action.payload.authMsg,
-        user: action.payload.user
+        user: action.payload.user,
+        verified: action.payload.verified //false
       }
     case SIGNUP_ERROR:
       return {
@@ -23,7 +25,8 @@ export default function (state = INITIAL_STATE, action) {
     case SIGNOUT_SUCCESS:
       return {
         user: null,
-        authMsg: action.payload.authMsg
+        authMsg: action.payload.authMsg,
+        verified: action.payload.verified //false
       }
     case SIGNOUT_ERROR:
       return {
@@ -34,12 +37,19 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         authMsg: action.payload.authMsg,
-        user: action.payload.user
+        user: action.payload.user,
+        verified: action.payload.verified //true
       }
     case SIGNIN_ERROR:
       return {
         ...state,
         authMsg: action.payload.authMsg
+      }
+    case EMAIL_NOT_VERIFIED:
+      return {
+        ...state,
+        authMsg: action.payload.authMsg,
+        verified: action.payload.verified //false
       }
     default:
       return state

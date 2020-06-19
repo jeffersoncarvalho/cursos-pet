@@ -7,6 +7,7 @@ import Main from './components/Main'
 import Signin from './components/Signin'
 import Signup from './components/Signup'
 import ContentA from './components/ContentA'
+import ContentB from './components/ContentB'
 
 class App extends Component {
 
@@ -28,7 +29,10 @@ class App extends Component {
                   <Link to={'/signup'} className='nav-link'>Sign-Up</Link>
                 </li>
                 <li>
-                  <Link to={'/content'} className='nav-link'>Content A</Link>
+                  <Link to={'/contentA'} className='nav-link'>Content A</Link>
+                </li>
+                <li>
+                  <Link to={'/contentB'} className='nav-link'>Content B</Link>
                 </li>
               </ul>
             </div>
@@ -38,7 +42,8 @@ class App extends Component {
             <Route exact path='/' component={Main} />
             <Route path='/signin' component={Signin} />
             <Route path='/signup' component={Signup} />
-            <Route path='/content' component={ContentA} />
+            <Route path='/contentA' component={ContentA} />
+            <Route path='/contentB' component={ContentB} />
           </Switch>
         </div>
       </Router>

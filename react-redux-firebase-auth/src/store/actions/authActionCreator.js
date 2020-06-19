@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR } from "./actionTypes";
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, EMAIL_NOT_VERIFIED } from "./actionTypes";
 import firebase from '../../utils/firebase'
 
 export const signup = (email, password, callback) => {
@@ -8,11 +8,22 @@ export const signup = (email, password, callback) => {
                 .createUserWithEmailAndPassword(email, password)
                 .then(
                     () => {
+                        firebase.auth().onAuthStateChanged( (user) => {
+                            user.sendEmailVerification()
+                        }) //onAuthStateChanged
+                    }
+                )
+                .then(
+                    () => {
                         firebase.auth().onAuthStateChanged(function (user) {
                             if (user) {
                                 dispatch({
                                     type: SIGNUP_SUCCESS,
-                                    payload: { authMsg: 'Cadastro efetuado com sucesso!', user: user.email }
+                                    payload: { 
+                                        authMsg: 'Cadastro efetuado com sucesso! Verifique seu e-mail.',
+                                        user: user.email,
+                                        verified: false
+                                    }
                                 })
                                 callback(user)
                             } else {
@@ -56,7 +67,7 @@ export const signout = (callback) => async dispatch => {
 
                     dispatch({
                         type: SIGNOUT_SUCCESS,
-                        payload: { authMsg: 'Signout efetuado com sucesso.' }
+                        payload: { authMsg: 'Signout efetuado com sucesso.', verified: false }
                     })
                     callback()
                 }
@@ -89,10 +100,27 @@ export const signin = (email, password, callback) => async dispatch => {
             .signInWithEmailAndPassword(email, password)
             .then(
                 (data) => {
-                    dispatch({
-                        type: SIGNIN_SUCCESS,
-                        payload: { authMsg: 'Signin efetuado com sucesso!', user: data.user.email }
-                    })
+
+                    if(!data.user.emailVerified){
+                        dispatch({
+                            type: EMAIL_NOT_VERIFIED,
+                            payload: { 
+                                authMsg: 'E-mail não verificado. Veja seu inbox!',
+                                verified: false 
+                            },
+                        })
+
+                    }else{
+                        dispatch({
+                            type: SIGNIN_SUCCESS,
+                            payload: { 
+                                authMsg: 'Signin efetuado com sucesso!', 
+                                user: data.user.email,
+                                verified: true
+                             },
+                            
+                        })
+                    }
                     callback(data.user)
                 }
             )
