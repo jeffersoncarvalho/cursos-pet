@@ -1,4 +1,4 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, EMAIL_NOT_VERIFIED } from "./actionTypes";
+import { SIGNUP_SUCCESS, SIGNUP_ERROR, SIGNOUT_SUCCESS, SIGNOUT_ERROR, SIGNIN_SUCCESS, SIGNIN_ERROR, EMAIL_NOT_VERIFIED, RESET_AUTH_MSG } from "./actionTypes";
 import firebase from '../../utils/firebase'
 
 export const signup = (email, password, callback) => {
@@ -140,5 +140,11 @@ export const signin = (email, password, callback) => async dispatch => {
             payload: { authMsg: `Erro na conexão com o firebase: ${error}` }
         })
         callback()
+    }
+}
+
+export const resetAuthMsg = () => {
+    return {
+        type: RESET_AUTH_MSG
     }
 }
