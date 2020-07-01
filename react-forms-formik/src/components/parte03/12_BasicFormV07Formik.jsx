@@ -37,12 +37,20 @@ export default () => {
             }
 
             onSubmit={
-                values => {
-                    console.log(values.firstName)
-                    console.log(values.lastName)
-                    console.log(values.email)
-                    console.log(values.colors)
-                    console.log(values.bigText)
+                (values, {setSubmitting}) => {
+
+                    setTimeout(
+                        () => {
+                            console.log(values.firstName)
+                            console.log(values.lastName)
+                            console.log(values.email)
+                            console.log(values.colors)
+                            console.log(values.bigText)
+                            setSubmitting(false)
+
+                        },
+                        1000
+                    )
                 }
             }
         >
