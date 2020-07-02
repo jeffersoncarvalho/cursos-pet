@@ -42,34 +42,45 @@ const MySelect = ({ label, ...props }) => {
 }
 
 const MyRadioGroup = (props) => {
-    //{name:'lang',id:'java',value='java',label:'Java'}
+    const [, meta] = useField('lang');
     const radiosJSX = props.radios.map(
-        (myRadio,i)=>{
-            return(
-                <MyRadio name={myRadio.name} id={myRadio.id} value={myRadio.value} key={i}>
-                    {myRadio.label}
-                </MyRadio>
+        (myRadio, i) => {
+            return (
+                <td>
+                    <MyRadio name={myRadio.name} id={myRadio.id} value={myRadio.value} key={i}>
+                        {myRadio.label}
+                    </MyRadio>
+                </td>
             )//JSX dos MyRadios
         }
     )//map
 
     return (
-        <div className='form-group'>
+        <div className='form-group' >
             {props.label}
-            {radiosJSX}
+            <table style={{marginTop:'4%'}}>
+                <tbody>
+                    <tr>
+                    {radiosJSX}
+                    </tr>
+                </tbody>
+            </table>
+            {meta.touched && meta.error ? (
+                <div className="invalid-feedback d-block">{meta.error}</div>
+            ) : null}
         </div>
     )
 
 }
 
-const MyRadio = ({children,...props}) => {
+const MyRadio = ({ children, ...props }) => {
     const [field,] = useField({ ...props, type: 'radio' })
-    return(
+    return (
         <div className='form-check'>
             <input type='radio'
-            {...props}
-            {...field} //onChange, onBlur e value
-            className='form-check-input'/>
+                {...props}
+                {...field} //onChange, onBlur e value
+                className='form-check-input' />
             <label className='form-check-label' htmlFor={props.id}>
                 {children}
             </label>
@@ -130,7 +141,7 @@ export default () => {
                     lastName: '',
                     email: '',
                     job: '', //select
-                    lang: 'java', //radio
+                    lang: '', //radio
                     comment: '', //text area
                     agree: false //checkbox
                 }
@@ -180,83 +191,97 @@ export default () => {
                             console.log(values.comment)
                             console.log(values.agree)
                             setSubmitting(false)
-
                         },
-                        200
+                        2000
                     )
                 }
             }
         >
             {
                 props => (
-                    <div>
-                        <h1>Formulário 14 - Formik</h1>
-                        <Form>
-                            <div>
-                                <MyTextInput
-                                    label='Nome'
-                                    name='firstName'
-                                    id='firstName'
-                                    type='text'
-                                    placeholder='Seu primeiro nome aqui'
-                                />
-                            </div>
-                            <div>
-                                <MyTextInput
-                                    label='Sobrenome'
-                                    name='lastName'
-                                    id='lastName'
-                                    type='text'
-                                    placeholder='Seu sobrenome nome aqui'
-                                />
-                            </div>
-                            <div>
-                                <MyTextInput
-                                    label='E-mail'
-                                    name='email'
-                                    id='email'
-                                    type='email'
-                                    placeholder='exemplo@dominio.com.br'
-                                />
-                            </div>
-                            <div>
-                                <MySelect label='Tipo de Emprego' name='job' id='job'>
-                                    <option value=''>Selecione um emprego</option>
-                                    <option value='designer'>Designer</option>
-                                    <option value='developer'>Desenvolvedor</option>
-                                    <option value='architect'>Arquiteto</option>
-                                    <option value='other'>Outro</option>
-                                </MySelect>
-                            </div>
-                            <div>
-                                <MyRadioGroup 
-                                    label='Selecione a sua linguagem predileta'
-                                    radios={
-                                        [
-                                            {name:'lang',id:'java',value:'java',label:'Java'},
-                                            {name:'lang',id:'cplusplus',value:'cplusplus',label:'C++'},
-                                            {name:'lang',id:'python',value:'python',label:'Python'}
-                                        ]
-                                    }
-                                />
-                            </div>
-                            <div>
-                                <MyTextArea
-                                    label='Comentários'
-                                    name='comment'
-                                    id='comment'
-                                    placeholder='Comente aqui...'
-                                />
-                            </div>
-                            <div>
-                                <MyCheckBox name='agree' id='agree'>
-                                    Eu aceito os termos e condições.
+                    <div className='card'>
+                        <div className='card-header'>Formulário 15 - Formik</div>
+                        <div className='card-body'>
+                            <Form>
+                                <div className='form-row'>
+                                    <div className='col-md-6'>
+                                        <MyTextInput
+                                            label='Nome'
+                                            name='firstName'
+                                            id='firstName'
+                                            type='text'
+                                            placeholder='Seu primeiro nome aqui'
+                                        />
+                                    </div>
+                                    <div className='col-md-6'>
+                                        <MyTextInput
+                                            label='Sobrenome'
+                                            name='lastName'
+                                            id='lastName'
+                                            type='text'
+                                            placeholder='Seu sobrenome nome aqui'
+                                        />
+                                    </div>
+                                </div>
+                                <div className='form-row'>
+                                    <div className='col-md-4'>
+                                        <MyTextInput
+                                            label='E-mail'
+                                            name='email'
+                                            id='email'
+                                            type='email'
+                                            placeholder='exemplo@dominio.com.br'
+                                        />
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <MySelect label='Tipo de Emprego' name='job' id='job'>
+                                            <option value=''>Selecione um emprego</option>
+                                            <option value='designer'>Designer</option>
+                                            <option value='developer'>Desenvolvedor</option>
+                                            <option value='architect'>Arquiteto</option>
+                                            <option value='other'>Outro</option>
+                                        </MySelect>
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <MyRadioGroup
+                                            label='Selecione a sua linguagem predileta'
+                                            radios={
+                                                [
+                                                    { name: 'lang', id: 'java', value: 'java', label: 'Java' },
+                                                    { name: 'lang', id: 'cplusplus', value: 'cplusplus', label: 'C++' },
+                                                    { name: 'lang', id: 'python', value: 'python', label: 'Python' }
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                                <div className='form-row'>
+                                    <div className='col-md-12'>
+                                        <MyTextArea
+                                            label='Comentários'
+                                            name='comment'
+                                            id='comment'
+                                            placeholder='Comente aqui...'
+                                        />
+                                    </div>
+                                </div>
+                                <div className='form-row'>
+                                    <div className='col-md-12'>
+                                        <MyCheckBox name='agree' id='agree'>
+                                            Eu aceito os termos e condições.
                                 </MyCheckBox>
-                            </div>
-                            <div>
-                                <button type='submit' className='btn btn-primary'>Submeter</button>
-                            </div>
-                        </Form>
+                                    </div>
+                                </div>
+                                <div className='form-row'>
+                                    <div className='col-md-12'>
+                                        <button type='submit' className='btn btn-primary'
+                                            disabled={props.isSubmitting ? true : false} >
+                                            Submeter
+                                        </button>
+                                    </div>
+                                </div>
+                            </Form>
+                        </div>
                     </div>
 
                 )
