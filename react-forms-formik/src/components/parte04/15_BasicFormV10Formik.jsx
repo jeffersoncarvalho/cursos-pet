@@ -41,14 +41,15 @@ const MySelect = ({ label, ...props }) => {
     )
 }
 
-const MyRadioGroup = (props) => {
-    const [, meta] = useField('lang');
+const MyRadioGroup = ({...props}) => {
+    //console.log(props)
+    const [, meta] = useField(props.name);
     const radiosJSX = props.radios.map(
         (myRadio, i) => {
             return (
-                <td>
-                    <MyRadio name={myRadio.name} id={myRadio.id} value={myRadio.value} key={i}>
-                        {myRadio.label}
+                <td key={i}>
+                    <MyRadio name={props.name} id={myRadio.id} value={myRadio.value}>
+                        <span style={{marginLeft:'1px', marginRight:'5px'}}>{myRadio.label}</span>
                     </MyRadio>
                 </td>
             )//JSX dos MyRadios
@@ -244,12 +245,13 @@ export default () => {
                                     </div>
                                     <div className='col-md-4'>
                                         <MyRadioGroup
+                                            name='lang' 
                                             label='Selecione a sua linguagem predileta'
                                             radios={
                                                 [
-                                                    { name: 'lang', id: 'java', value: 'java', label: 'Java' },
-                                                    { name: 'lang', id: 'cplusplus', value: 'cplusplus', label: 'C++' },
-                                                    { name: 'lang', id: 'python', value: 'python', label: 'Python' }
+                                                    { id: 'java', value: 'java', label: 'Java' },
+                                                    { id: 'cplusplus', value: 'cplusplus', label: 'C++' },
+                                                    { id: 'python', value: 'python', label: 'Python' }
                                                 ]
                                             }
                                         />
